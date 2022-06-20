@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="320.0" prefWidth="480.0" spacing="1.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.indiefun.contactmanager.MainController">
+   <MenuBar>
+     <menus>
+       <Menu mnemonicParsing="false" text="File">
+         <items>
+           <MenuItem mnemonicParsing="false" onAction="#onMenuOpenClicked" text="Open" />
+               <MenuItem mnemonicParsing="false" onAction="#onMenuSaveAsClicked" text="Save As" />
+               <SeparatorMenuItem mnemonicParsing="false" />
+               <MenuItem mnemonicParsing="false" onAction="#onMenuExitClicked" text="Exit" />
+         </items>
+       </Menu>
+       <Menu mnemonicParsing="false" text="Edit">
+         <items>
+               <MenuItem fx:id="menuDuplicate" disable="true" mnemonicParsing="false" onAction="#onMenuDuplicateClicked" text="Duplicate" />
+               <MenuItem fx:id="menuDelete" disable="true" mnemonicParsing="false" onAction="#onMenuDeleteClicked" text="Delete" />
+               <SeparatorMenuItem mnemonicParsing="false" />
+               <MenuItem fx:id="menuDelete1" mnemonicParsing="false" onAction="#onMenuSettingsClicked" text="Settings" />
+         </items>
+       </Menu>
+       <Menu mnemonicParsing="false" text="Tool">
+         <items>
+               <Menu mnemonicParsing="false" text="Remove whitespaces for">
+                 <items>
+                   <MenuItem mnemonicParsing="false" onAction="#onMenuRemoveWhitespacesForAllFieldsClicked" text="All fields" />
+                     <SeparatorMenuItem mnemonicParsing="false" />
+                 <MenuItem mnemonicParsing="false" onAction="#onMenuRemoveWhitespacesForFormattedNamesClicked" text="FormattedNames" />
+                     <MenuItem mnemonicParsing="false" onAction="#onMenuRemoveWhitespacesForStructuredNamesClicked" text="StructuredNames" />
+                 </items>
+               </Menu>
+             <MenuItem mnemonicParsing="false" onAction="#onMenuFormatTelephonesClicked" text="Format telephones" />
+             <MenuItem mnemonicParsing="false" onAction="#onMenuRemoveDuplicationsClicked" text="Remove duplications" />
+         </items>
+       </Menu>
+         <Menu mnemonicParsing="false" text="Help">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#onMenuAboutClicked" text="About" />
+            </items>
+         </Menu>
+     </menus>
+   </MenuBar>
+   <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="480.0" VBox.vgrow="ALWAYS" />
+</VBox>
