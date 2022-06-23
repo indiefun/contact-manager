@@ -1,22 +1,22 @@
 package tech.indiefun.contactmanager.ColumnRender;
 
 import ezvcard.VCard;
-import ezvcard.property.Telephone;
+import ezvcard.property.Email;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
-import tech.indiefun.contactmanager.TelephoneStringConverter;
+import javafx.util.converter.DefaultStringConverter;
 
-public class TelephoneNumberRender extends AbstractColumnRender {
-    public static final int ORDER = 30;
+public class EmailRender extends AbstractColumnRender {
+    public static final int ORDER = 40;
 
     @Override
     public Class<? extends VCardProperty> support() {
-        return Telephone.class;
+        return Email.class;
     }
 
     @Override
     protected String title() {
-        return "Telephone";
+        return "Email";
     }
 
     @Override
@@ -24,11 +24,11 @@ public class TelephoneNumberRender extends AbstractColumnRender {
         return RenderUtils.column(
                 title,
                 index,
-                VCard::getTelephoneNumbers,
-                Telephone::getText,
-                Telephone::setText,
-                Telephone::new,
-                new TelephoneStringConverter()
+                VCard::getEmails,
+                Email::getValue,
+                Email::setValue,
+                Email::new,
+                new DefaultStringConverter()
         );
     }
 

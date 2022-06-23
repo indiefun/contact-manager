@@ -7,6 +7,8 @@ import javafx.scene.control.TableColumn;
 import javafx.util.converter.DefaultStringConverter;
 
 public class StructuredNameRender extends AbstractColumnRender {
+    public static final int ORDER = 20;
+
     @Override
     public Class<? extends VCardProperty> support() {
         return StructuredName.class;
@@ -54,5 +56,10 @@ public class StructuredNameRender extends AbstractColumnRender {
         groupColumn.getColumns().add(givenColumn);
 
         return groupColumn;
+    }
+
+    @Override
+    public int order() {
+        return ORDER;
     }
 }

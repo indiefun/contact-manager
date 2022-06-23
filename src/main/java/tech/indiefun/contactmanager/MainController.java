@@ -19,6 +19,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -32,7 +33,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 public class MainController {
 
     @FXML
@@ -47,6 +48,7 @@ public class MainController {
     private TableView<VCard> tableView;
 
     private final Map<Class<? extends VCardProperty>, ColumnRender> supportRenders = new HashMap<>();
+    private final Map<Class<? extends VCardProperty>, Integer> propertyOrders = new HashMap<>();
 
     @FXML
     protected void initialize() {
@@ -58,10 +60,11 @@ public class MainController {
                     Constructor<? extends ColumnRender> constructor = renderClass.getConstructor();
                     ColumnRender columnRender = constructor.newInstance();
                     supportRenders.put(columnRender.support(), columnRender);
+                    propertyOrders.put(columnRender.support(), columnRender.order());
                 }
             }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                 InvocationTargetException e) {
+                InvocationTargetException e) {
             throw new RuntimeException(e);
         }
 
@@ -95,13 +98,25 @@ public class MainController {
                 }
             }
         }
+
         List<Class<? extends VCardProperty>> propertyClassList = new ArrayList<>(propertyCountMap.keySet());
-        propertyClassList.sort(Comparator.comparing(Class::getSimpleName, Comparator.naturalOrder()));
+        propertyClassList.sort((l, r) -> {
+            Integer lo = propertyOrders.getOrDefault(l, ColumnRender.ORDER);
+            Integer ro = propertyOrders.getOrDefault(r, ColumnRender.ORDER);
+            if (Objects.equals(lo, ro)) {
+                return l.getSimpleName().compareTo(r.getSimpleName());
+            } else {
+                return lo.compareTo(ro);
+            }
+        });
+
         for (Class<? extends VCardProperty> propertyClass : propertyClassList) {
             Integer count = propertyCountMap.get(propertyClass);
             ColumnRender columnRender = supportRenders.getOrDefault(propertyClass, null);
             if (columnRender != null) {
                 columnRender.render(tableView, count);
+            } else {
+                log.debug("Unsupported Property Class : {}", propertyClass);
             }
         }
     }
