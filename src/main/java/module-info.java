@@ -16,6 +16,8 @@ module tech.indiefun.contactmanager {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires org.reflections;
+    requires org.slf4j;
+    requires lombok;
 
     opens tech.indiefun.contactmanager to javafx.fxml;
     exports tech.indiefun.contactmanager;
