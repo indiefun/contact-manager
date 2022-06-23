@@ -76,10 +76,10 @@ public class MainController {
         menusShouldBeDisabledWhenSelectNone.forEach(menuItem -> menuItem.setDisable(disable));
     }
 
-    private void initializeColumns(List<VCard> cards) {
+    private void initializeColumns() {
         tableView.getColumns().clear();
         Map<Class<? extends VCardProperty>, Integer> propertyCountMap = new HashMap<>();
-        for (VCard card : cards) {
+        for (VCard card : tableView.getItems()) {
             Map<Class<? extends VCardProperty>, Integer> curCountMap = new HashMap<>();
             Collection<VCardProperty> properties = card.getProperties();
             for (VCardProperty property : properties) {
@@ -142,7 +142,7 @@ public class MainController {
             alert.showAndWait();
         }
         tableView.getItems().addAll(cards);
-        initializeColumns(cards);
+        initializeColumns();
     }
 
     @FXML
