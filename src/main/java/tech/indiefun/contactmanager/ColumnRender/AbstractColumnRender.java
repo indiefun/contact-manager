@@ -8,7 +8,7 @@ public abstract class AbstractColumnRender implements ColumnRender {
 
     protected abstract String title();
 
-    protected abstract TableColumn<VCard, String> column(String title, int index);
+    protected abstract TableColumn<VCard, ?> column(String title, int index);
 
     @Override
     public void render(TableView<VCard> tableView, int count) {
