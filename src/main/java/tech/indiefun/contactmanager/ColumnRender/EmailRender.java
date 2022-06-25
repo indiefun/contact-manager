@@ -4,7 +4,6 @@ import ezvcard.VCard;
 import ezvcard.property.Email;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
-import javafx.util.converter.DefaultStringConverter;
 
 public class EmailRender extends AbstractColumnRender {
     public static final int ORDER = 40;
@@ -27,8 +26,7 @@ public class EmailRender extends AbstractColumnRender {
                 VCard::getEmails,
                 Email::getValue,
                 Email::setValue,
-                Email::new,
-                new DefaultStringConverter()
+                Email::new
         );
     }
 

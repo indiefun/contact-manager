@@ -4,7 +4,6 @@ import ezvcard.VCard;
 import ezvcard.property.StructuredName;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
-import javafx.util.converter.DefaultStringConverter;
 
 public class StructuredNameRender extends AbstractColumnRender {
     public static final int ORDER = 20;
@@ -33,8 +32,7 @@ public class StructuredNameRender extends AbstractColumnRender {
                     StructuredName structuredName = new StructuredName();
                     structuredName.setFamily(value);
                     return structuredName;
-                },
-                new DefaultStringConverter()
+                }
         );
 
         groupColumn.getColumns().add(familyColumn);
@@ -49,8 +47,7 @@ public class StructuredNameRender extends AbstractColumnRender {
                     StructuredName structuredName = new StructuredName();
                     structuredName.setGiven(value);
                     return structuredName;
-                },
-                new DefaultStringConverter()
+                }
         );
 
         groupColumn.getColumns().add(givenColumn);

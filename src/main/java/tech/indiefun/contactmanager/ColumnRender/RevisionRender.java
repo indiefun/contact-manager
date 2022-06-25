@@ -4,7 +4,6 @@ import ezvcard.VCard;
 import ezvcard.property.Revision;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
-import lombok.extern.slf4j.Slf4j;
 import tech.indiefun.contactmanager.TableCell.DatePickerTableCell;
 
 import java.time.LocalDate;
@@ -12,7 +11,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-@Slf4j
 public class RevisionRender extends AbstractColumnRender {
     public static final int ORDER = 100;
 

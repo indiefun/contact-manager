@@ -4,10 +4,7 @@ import ezvcard.VCard;
 import ezvcard.property.Url;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
-import javafx.util.converter.DefaultStringConverter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class UrlRender extends AbstractColumnRender {
     public static final int ORDER = 60;
 
@@ -29,8 +26,7 @@ public class UrlRender extends AbstractColumnRender {
                 VCard::getUrls,
                 Url::getValue,
                 Url::setValue,
-                Url::new,
-                new DefaultStringConverter()
+                Url::new
         );
     }
 

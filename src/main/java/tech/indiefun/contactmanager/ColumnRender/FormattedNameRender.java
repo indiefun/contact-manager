@@ -4,7 +4,6 @@ import ezvcard.VCard;
 import ezvcard.property.FormattedName;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
-import javafx.util.converter.DefaultStringConverter;
 
 public class FormattedNameRender extends AbstractColumnRender {
     public static final int ORDER = 10;
@@ -27,8 +26,7 @@ public class FormattedNameRender extends AbstractColumnRender {
                 VCard::getFormattedNames,
                 FormattedName::getValue,
                 FormattedName::setValue,
-                FormattedName::new,
-                new DefaultStringConverter()
+                FormattedName::new
         );
     }
 
