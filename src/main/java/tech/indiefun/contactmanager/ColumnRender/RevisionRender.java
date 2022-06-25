@@ -3,7 +3,6 @@ package tech.indiefun.contactmanager.ColumnRender;
 import ezvcard.VCard;
 import ezvcard.property.Revision;
 import ezvcard.property.VCardProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableColumn;
 import lombok.extern.slf4j.Slf4j;
 import tech.indiefun.contactmanager.TableCell.DatePickerTableCell;
@@ -11,6 +10,7 @@ import tech.indiefun.contactmanager.TableCell.DatePickerTableCell;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 public class RevisionRender extends AbstractColumnRender {
@@ -34,23 +34,22 @@ public class RevisionRender extends AbstractColumnRender {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
+    List<Revision> getRevisions(VCard card) {
+        Revision revision = card.getRevision();
+        return revision == null ? List.of() : List.of(revision);
+    }
+
     @Override
     protected TableColumn<VCard, ?> column(String title, int index) {
-        TableColumn<VCard, LocalDate> column = new TableColumn<>(title);
-        column.setCellValueFactory(features -> {
-            VCard card = features.getValue();
-            Revision revision = card.getRevision();
-            return new SimpleObjectProperty<LocalDate>(revision == null ? null : toLocalDate(revision.getValue()));
-        });
-        column.setCellFactory(DatePickerTableCell.forTableColumn());
-        column.setOnEditCommit(event -> {
-            VCard card = event.getRowValue();
-            Date value = toDate(event.getNewValue());
-            Revision revision = card.getRevision();
-            if (revision == null) card.setRevision(value);
-            else revision.setValue(value);
-        });
-        return column;
+        return RenderUtils.column(
+                title,
+                index,
+                this::getRevisions,
+                revision -> toLocalDate(revision.getValue()),
+                (property, value) -> property.setValue(toDate(value)),
+                value -> new Revision(toDate(value)),
+                DatePickerTableCell.forTableColumn()
+        );
     }
 
     @Override

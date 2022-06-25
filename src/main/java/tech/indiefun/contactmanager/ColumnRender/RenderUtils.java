@@ -2,11 +2,12 @@ package tech.indiefun.contactmanager.ColumnRender;
 
 import ezvcard.VCard;
 import ezvcard.property.VCardProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
@@ -16,40 +17,40 @@ public class RenderUtils {
         List<T> extract(VCard card);
     }
 
-    public interface PropertyValueGetter<T extends VCardProperty> {
-        String get(T property);
+    public interface PropertyValueGetter<T extends VCardProperty, P> {
+        P get(T property);
     }
 
-    public interface PropertyValueSetter<T extends VCardProperty> {
-        void set(T property, String value);
+    public interface PropertyValueSetter<T extends VCardProperty, P> {
+        void set(T property, P value);
     }
 
-    public interface PropertyCreator<T extends VCardProperty> {
-        T create(String value);
+    public interface PropertyCreator<T extends VCardProperty, P> {
+        T create(P value);
     }
 
-    public static <T extends VCardProperty> TableColumn<VCard, String> column(
+    public static <T extends VCardProperty, P> TableColumn<VCard, P> column(
             String title,
             int index,
             PropertiesExtractor<T> propertiesExtractor,
-            PropertyValueGetter<T> propertyValueGetter,
-            PropertyValueSetter<T> propertyValueSetter,
-            PropertyCreator<T> propertyCreator,
-            StringConverter<String> stringConverter
+            PropertyValueGetter<T, P> propertyValueGetter,
+            PropertyValueSetter<T, P> propertyValueSetter,
+            PropertyCreator<T, P> propertyCreator,
+            Callback<TableColumn<VCard, P>, TableCell<VCard, P>> tableCellFactory
     ) {
-        TableColumn<VCard, String> column = new TableColumn<>(title);
+        TableColumn<VCard, P> column = new TableColumn<>(title);
         column.setCellValueFactory(features -> {
             List<T> properties = propertiesExtractor.extract(features.getValue());
-            SimpleStringProperty stringProperty = new SimpleStringProperty();
+            SimpleObjectProperty<P> objectProperty = new SimpleObjectProperty<>();
             if (index < properties.size()) {
-                String value = propertyValueGetter.get(properties.get(index));
-                stringProperty.setValue(StringUtils.defaultIfEmpty(value, null));
+                P value = propertyValueGetter.get(properties.get(index));
+                objectProperty.setValue(value);
             }
-            return stringProperty;
+            return objectProperty;
         });
-        column.setCellFactory(TextFieldTableCell.forTableColumn(stringConverter));
+        column.setCellFactory(tableCellFactory);
         column.setOnEditCommit(event -> {
-            String value = event.getNewValue();
+            P value = event.getNewValue();
             List<T> properties = propertiesExtractor.extract(event.getRowValue());
             if (index < properties.size()) {
                 propertyValueSetter.set(properties.get(index), value);
@@ -58,5 +59,44 @@ public class RenderUtils {
             }
         });
         return column;
+    }
+
+    public static <T extends VCardProperty, P> TableColumn<VCard, P> column(
+            String title,
+            int index,
+            PropertiesExtractor<T> propertiesExtractor,
+            PropertyValueGetter<T, P> propertyValueGetter,
+            PropertyValueSetter<T, P> propertyValueSetter,
+            PropertyCreator<T, P> propertyCreator,
+            StringConverter<P> stringConverter
+    ) {
+        return column(
+                title,
+                index,
+                propertiesExtractor,
+                propertyValueGetter,
+                propertyValueSetter,
+                propertyCreator,
+                TextFieldTableCell.forTableColumn(stringConverter)
+        );
+    }
+
+    public static <T extends VCardProperty> TableColumn<VCard, String> column(
+            String title,
+            int index,
+            PropertiesExtractor<T> propertiesExtractor,
+            PropertyValueGetter<T, String> propertyValueGetter,
+            PropertyValueSetter<T, String> propertyValueSetter,
+            PropertyCreator<T, String> propertyCreator
+    ) {
+        return column(
+                title,
+                index,
+                propertiesExtractor,
+                propertyValueGetter,
+                propertyValueSetter,
+                propertyCreator,
+                TextFieldTableCell.forTableColumn()
+        );
     }
 }
