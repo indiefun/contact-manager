@@ -36,7 +36,7 @@ public class RevisionRender extends AbstractColumnRender {
 
     @Override
     protected TableColumn<VCard, ?> column(String title, int index) {
-        TableColumn<VCard, LocalDate> column = new TableColumn<>();
+        TableColumn<VCard, LocalDate> column = new TableColumn<>(title);
         column.setCellValueFactory(features -> {
             VCard card = features.getValue();
             Revision revision = card.getRevision();
