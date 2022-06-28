@@ -162,6 +162,24 @@ public class MainController {
 
     @FXML
     protected void onMenuSaveAsClicked(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save as vCard file");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All vCard files", "*.vcf", "*.vcard"));
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            if (!file.getName().endsWith(".vcf") || !file.getName().endsWith(".vcard")) {
+                file = new File(file.getAbsolutePath() + ".vcf");
+            }
+            try {
+                Ezvcard.write(tableView.getItems()).go(file);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Save as " + file.getName() + " failed, cause of " + e.getLocalizedMessage());
+                alert.showAndWait();
+            }
+        }
     }
 
     @FXML
