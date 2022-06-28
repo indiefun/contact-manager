@@ -4,6 +4,7 @@ import ezvcard.VCard;
 import ezvcard.property.Revision;
 import ezvcard.property.VCardProperty;
 import javafx.scene.control.TableColumn;
+import tech.indiefun.contactmanager.GlobalSettings;
 import tech.indiefun.contactmanager.TableCell.DatePickerTableCell;
 
 import java.time.LocalDate;
@@ -24,12 +25,16 @@ public class RevisionRender extends AbstractColumnRender {
         return "Revision";
     }
 
+    private ZoneId zoneId() {
+        return ZoneId.of(GlobalSettings.getInstance().getConfigurations().getDefaultTimeZoneID());
+    }
+
     LocalDate toLocalDate(Date date) {
-        return LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        return LocalDate.ofInstant(date.toInstant(), zoneId());
     }
 
     Date toDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return Date.from(localDate.atStartOfDay(zoneId()).toInstant());
     }
 
     List<Revision> getRevisions(VCard card) {

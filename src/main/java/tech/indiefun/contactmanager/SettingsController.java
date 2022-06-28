@@ -10,11 +10,15 @@ import javafx.stage.Stage;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
+import java.time.ZoneId;
 
 public class SettingsController {
 
     @FXML
-    private ChoiceBox<String> regionChoiceBox;
+    private ChoiceBox<String> regionCodeChoiceBox;
+
+    @FXML
+    private ChoiceBox<String> timeZoneIDChoiceBox;
 
     private GlobalSettings.Configurations configurations;
 
@@ -22,12 +26,21 @@ public class SettingsController {
     protected void initialize() {
         configurations = new GlobalSettings.Configurations(GlobalSettings.getInstance().getConfigurations());
         for (String region : ShortNumbersRegionCodeSet.getRegionCodeSet()) {
-            regionChoiceBox.getItems().add(region);
+            regionCodeChoiceBox.getItems().add(region);
         }
-        regionChoiceBox.getSelectionModel().select(configurations.getDefaultRegionCode());
-        regionChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        regionCodeChoiceBox.getSelectionModel().select(configurations.getDefaultRegionCode());
+        regionCodeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (StringUtils.isNotEmpty(newValue)) {
                 configurations.setDefaultRegionCode(newValue);
+            }
+        });
+        for (String zoneId : ZoneId.getAvailableZoneIds()) {
+            timeZoneIDChoiceBox.getItems().add(zoneId);
+        }
+        timeZoneIDChoiceBox.getSelectionModel().select(configurations.getDefaultTimeZoneID());
+        regionCodeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (StringUtils.isNotEmpty(newValue)) {
+                configurations.setDefaultTimeZoneID(newValue);
             }
         });
     }

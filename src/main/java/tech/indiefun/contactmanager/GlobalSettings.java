@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.ZoneId;
 
 public class GlobalSettings {
 
@@ -20,6 +21,8 @@ public class GlobalSettings {
     public static class Configurations {
         private String defaultRegionCode = "CN";
 
+        private String defaultTimeZoneID = ZoneId.systemDefault().getId();
+
         public Configurations() {
         }
 
@@ -33,6 +36,14 @@ public class GlobalSettings {
 
         public void setDefaultRegionCode(String defaultRegionCode) {
             this.defaultRegionCode = defaultRegionCode;
+        }
+
+        public String getDefaultTimeZoneID() {
+            return defaultTimeZoneID;
+        }
+
+        public void setDefaultTimeZoneID(String defaultTimeZoneID) {
+            this.defaultTimeZoneID = defaultTimeZoneID;
         }
     }
 
