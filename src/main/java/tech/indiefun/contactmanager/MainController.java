@@ -69,25 +69,20 @@ public class MainController {
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<VCard>) change -> updateMenuStatus(change.getList().size()));
-        tableView.setRowFactory(new Callback<TableView<VCard>, TableRow<VCard>>() {
+        tableView.setRowFactory(_tableView -> new TableRow<VCard>() {
             @Override
-            public TableRow<VCard> call(TableView<VCard> tableView) {
-                return new TableRow<VCard>() {
-                    @Override
-                    protected void updateItem(VCard item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (!empty && item != null
-                                && item.getExtendedProperty(HIGHLIGHT_PROPERTY) != null
-                                && !getTableView().getSelectionModel().getSelectedItems().contains(item)
-                        ) {
-                            String[] values = item.getExtendedProperty(HIGHLIGHT_PROPERTY).getValue().split(";");
-                            if (values.length == 0) return;
-                            this.setStyle("-fx-background-color: yellow; -fx-text-fill : #000000;");
-                        } else {
-                            this.setStyle(null);
-                        }
-                    }
-                };
+            protected void updateItem(VCard card, boolean empty) {
+                super.updateItem(card, empty);
+                if (!empty && card != null
+                        && card.getExtendedProperty(HIGHLIGHT_PROPERTY) != null
+                        && !getTableView().getSelectionModel().getSelectedItems().contains(card)
+                ) {
+                    String[] values = card.getExtendedProperty(HIGHLIGHT_PROPERTY).getValue().split(";");
+                    if (values.length == 0) return;
+                    this.setStyle("-fx-background-color: yellow; -fx-text-fill : #000000;");
+                } else {
+                    this.setStyle(null);
+                }
             }
         });
     }
@@ -189,6 +184,8 @@ public class MainController {
             if (!file.getName().endsWith(".vcf") || !file.getName().endsWith(".vcard")) {
                 file = new File(file.getAbsolutePath() + ".vcf");
             }
+            tableView.getItems().forEach(card -> card.removeExtendedProperty(HIGHLIGHT_PROPERTY));
+            tableView.refresh();
             try {
                 Ezvcard.write(tableView.getItems()).go(file);
             } catch (IOException e) {
