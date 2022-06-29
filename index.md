@@ -43,8 +43,8 @@ You can use the software freely, if you have experience in javafx development, y
 ### Screenshot
 
 * Main window
-![Main window](pics/main-window-01.png)
+![Main window](https://github.com/indiefun/contact-manager/raw/gh-pages/pics/main-window-01.png)
 
 * Setting window
-![Main window](pics/setting-window-01.png)
+![Main window](https://github.com/indiefun/contact-manager/raw/gh-pages/pics/setting-window-01.png)
 
