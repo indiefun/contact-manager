@@ -1,37 +1,50 @@
-## Welcome to GitHub Pages
+## Contact Manager
 
-You can use the [editor on GitHub](https://github.com/indiefun/contact-manager/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+It's a toolset for vcard file management, and is developed with javafx framework.
+You can use the software freely, if you have experience in javafx development, you can also improve the software together.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Features
 
-### Markdown
+* Fields that support editing
+  * FormattedName
+  * StructuredName
+  * TelephoneNumber
+  * Organization (not yet perfect, multi organization should separate by semicolon)
+  * Email
+  * Url
+  * Impp (not yet perfect, only text edits can be used to the original content)
+  * Note
+  * ProductId (not yet perfect, will be replaced by [mangstadt/ez-vcard](https://github.com/mangstadt/ez-vcard) when saving)
+  * Revision (not yet perfect, only date edits can be made to revision, the time can't be specialed)
+* Operations that supportted
+  * remove whitespaces for FormattedName, StructuredName
+  * format telephone numbers
+  * remove duplicated contact
+* no more unless there is more requirement
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Usage
 
-```markdown
-Syntax highlighted code block
+* Now, you can only use it by compiling it in you os, I will put the executable program on Release Page if I can package this project.
+  * ```git clone https://github.com/indiefun/contact-manager.git```
+  * open contact-manager/pom.xml in IntelliJ IDEA, and wait for dependences downloaded by maven
+  * run MainApplication.main
+* click File -> Open to open the .vcf or .vcard files, you can open multi files once or more times, it will append records in current dataset
+* edit fields or use toolset provided by this program, like removing duplications, formatting telephones, etc.
+* click File -> Save as button to save the results into one vcard file
 
-# Header 1
-## Header 2
-### Header 3
+### Todo
 
-- Bulleted
-- List
+* Package executable program for multi platform (win, mac, linux), but I have no success in it, I think I need help if You can and would.
+* Support editing for more fields
+* Complete editing perfectly for the fields that not yet perfect
+* Making an Icon
+* Support keyboard shortcuts for editing
 
-1. Numbered
-2. List
+### Screenshot
 
-**Bold** and _Italic_ and `Code` text
+* Main window
+![Main window](pics/main-window-01.png)
 
-[Link](url) and ![Image](src)
-```
+* Setting window
+![Main window](pics/setting-window-01.png)
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/indiefun/contact-manager/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
