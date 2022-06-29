@@ -5,6 +5,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" prefHeight="320.0" prefWidth="480.0" spacing="1.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.indiefun.contactmanager.MainController">
@@ -12,16 +13,34 @@
      <menus>
        <Menu mnemonicParsing="false" text="File">
          <items>
-           <MenuItem mnemonicParsing="false" onAction="#onMenuOpenClicked" text="Open" />
-               <MenuItem mnemonicParsing="false" onAction="#onMenuSaveAsClicked" text="Save As" />
+           <MenuItem mnemonicParsing="false" onAction="#onMenuOpenClicked" text="Open">
+                  <accelerator>
+                     <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                  </accelerator></MenuItem>
+               <MenuItem mnemonicParsing="false" onAction="#onMenuSaveAsClicked" text="Save As">
+                  <accelerator>
+                     <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                  </accelerator></MenuItem>
                <SeparatorMenuItem mnemonicParsing="false" />
-               <MenuItem mnemonicParsing="false" onAction="#onMenuExitClicked" text="Exit" />
+               <MenuItem mnemonicParsing="false" onAction="#onMenuExitClicked" text="Exit">
+                  <accelerator>
+                     <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                  </accelerator></MenuItem>
          </items>
        </Menu>
        <Menu mnemonicParsing="false" text="Edit">
          <items>
-               <MenuItem fx:id="menuDuplicate" disable="true" mnemonicParsing="false" onAction="#onMenuDuplicateClicked" text="Duplicate" />
+               <MenuItem fx:id="menuDuplicate" disable="true" mnemonicParsing="false" onAction="#onMenuDuplicateClicked" text="Duplicate">
+                  <accelerator>
+                     <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                  </accelerator></MenuItem>
                <MenuItem fx:id="menuDelete" disable="true" mnemonicParsing="false" onAction="#onMenuDeleteClicked" text="Delete" />
+               <SeparatorMenuItem mnemonicParsing="false" />
+               <MenuItem mnemonicParsing="false" onAction="#onMenuFindClicked" text="Find">
+                  <accelerator>
+                     <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                  </accelerator>
+               </MenuItem>
                <SeparatorMenuItem mnemonicParsing="false" />
                <MenuItem fx:id="menuDelete1" mnemonicParsing="false" onAction="#onMenuSettingsClicked" text="Settings" />
          </items>
@@ -42,7 +61,10 @@
        </Menu>
          <Menu mnemonicParsing="false" text="Help">
             <items>
-               <MenuItem mnemonicParsing="false" onAction="#onMenuAboutClicked" text="About" />
+               <MenuItem mnemonicParsing="false" onAction="#onMenuAboutClicked" text="About">
+                  <accelerator>
+                     <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                  </accelerator></MenuItem>
             </items>
          </Menu>
      </menus>

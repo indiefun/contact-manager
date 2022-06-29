@@ -3,22 +3,17 @@ package tech.indiefun.contactmanager;
 import com.google.i18n.phonenumbers.NumberParseException;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
-import ezvcard.property.FormattedName;
-import ezvcard.property.StructuredName;
-import ezvcard.property.Telephone;
-import ezvcard.property.VCardProperty;
+import ezvcard.property.*;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.reflections.Reflections;
@@ -35,6 +30,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class MainController {
+
+    private static final String HIGHLIGHT_PROPERTY = "X-HIGHLIGHT";
 
     @FXML
     private MenuItem menuDuplicate;
@@ -64,7 +61,7 @@ public class MainController {
                 }
             }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                InvocationTargetException e) {
+                 InvocationTargetException e) {
             throw new RuntimeException(e);
         }
 
@@ -72,6 +69,27 @@ public class MainController {
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<VCard>) change -> updateMenuStatus(change.getList().size()));
+        tableView.setRowFactory(new Callback<TableView<VCard>, TableRow<VCard>>() {
+            @Override
+            public TableRow<VCard> call(TableView<VCard> tableView) {
+                return new TableRow<VCard>() {
+                    @Override
+                    protected void updateItem(VCard item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!empty && item != null
+                                && item.getExtendedProperty(HIGHLIGHT_PROPERTY) != null
+                                && !getTableView().getSelectionModel().getSelectedItems().contains(item)
+                        ) {
+                            String[] values = item.getExtendedProperty(HIGHLIGHT_PROPERTY).getValue().split(";");
+                            if (values.length == 0) return;
+                            this.setStyle("-fx-background-color: yellow; -fx-text-fill : #000000;");
+                        } else {
+                            this.setStyle(null);
+                        }
+                    }
+                };
+            }
+        });
     }
 
     private void updateMenuStatus(int selectedCount) {
@@ -357,5 +375,44 @@ public class MainController {
         stage.setTitle("Settings");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void findByKeywords(String keywords) {
+        for (VCard card : tableView.getItems()) {
+            List<String> highlightProperties = new ArrayList<>();
+            if (card.getFormattedNames().stream().anyMatch(formattedName -> formattedName.getValue().contains(keywords))) {
+                highlightProperties.add("FormattedName");
+            }
+            if (card.getStructuredNames().stream().anyMatch(structuredName -> String.join(";", structuredName.getFamily(), structuredName.getGiven()).contains(keywords))) {
+                highlightProperties.add("StructuredName");
+            }
+            if (card.getTelephoneNumbers().stream().anyMatch(telephone -> telephone.getText().contains(keywords))) {
+                highlightProperties.add("Telephone");
+            }
+            if (card.getEmails().stream().anyMatch(email -> email.getValue().contains(keywords))) {
+                highlightProperties.add("Email");
+            }
+            if (card.getOrganizations().stream().anyMatch(organization -> organization.getValues().stream().anyMatch(value -> value.contains(keywords)))) {
+                highlightProperties.add("Organization");
+            }
+            if (card.getNotes().stream().anyMatch(note -> note.getValue().contains(keywords))) {
+                highlightProperties.add("Note");
+            }
+            if (!highlightProperties.isEmpty()) {
+                card.setExtendedProperty(HIGHLIGHT_PROPERTY, String.join(";", highlightProperties));
+            } else {
+                card.removeExtendedProperty(HIGHLIGHT_PROPERTY);
+            }
+        }
+        tableView.refresh();
+    }
+
+    @FXML
+    protected void onMenuFindClicked(ActionEvent actionEvent) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Find");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Keywords: ");
+        dialog.showAndWait().filter(StringUtils::isNotEmpty).ifPresent(this::findByKeywords);
     }
 }
